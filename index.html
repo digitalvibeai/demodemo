@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ваш бренд — Каталог товаров</title>
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0e0e0e;
+      --surface: #161616;
+      --surface2: #1f1f1f;
+      --border: #2a2a2a;
+      --accent: #e8ff47;
+      --accent2: #ff6b35;
+      --text: #f0f0f0;
+      --muted: #888;
+      --radius: 16px;
+      --card-radius: 20px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Manrope', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ─── HEADER ─── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(14,14,14,0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+    }
+    .header-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 68px;
+      gap: 16px;
+    }
+    .logo {
+      font-family: 'Unbounded', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--text);
+      white-space: nowrap;
+      letter-spacing: -0.03em;
+    }
+    .logo span { color: var(--accent); }
+
+    .header-tg {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #229ED9;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 9px 18px;
+      font-family: 'Manrope', sans-serif;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .header-tg:hover { background: #1a8cbf; transform: translateY(-1px); }
+    .header-tg svg { flex-shrink: 0; }
+
+    /* ─── HERO ─── */
+    .hero {
+      padding: 64px 24px 40px;
+      text-align: center;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .hero h1 {
+      font-family: 'Unbounded', sans-serif;
+      font-size: clamp(2rem, 6vw, 4rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.04em;
+      margin-bottom: 16px;
+    }
+    .hero h1 em {
+      font-style: normal;
+      color: var(--accent);
+      display: block;
+    }
+    .hero p {
+      color: var(--muted);
+      font-size: 1.05rem;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    /* ─── FILTERS ─── */
+    .filters-wrap {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 24px 32px;
+    }
+    .filters-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .filter-btn {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      color: var(--muted);
+      border-radius: 100px;
+      padding: 8px 18px;
+      font-family: 'Manrope', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .filter-btn:hover {
+      border-color: var(--accent);
+      color: var(--text);
+    }
+    .filter-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #0e0e0e;
+    }
+
+    /* ─── GRID ─── */
+    .catalog-wrap {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+    .count-line {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 20px;
+      font-weight: 500;
+    }
+    .count-line strong { color: var(--text); }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 20px;
+    }
+
+    /* ─── CARD ─── */
+    .card {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--card-radius);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: border-color 0.25s, transform 0.25s;
+      animation: fadeUp 0.4s ease both;
+    }
+    .card:hover {
+      border-color: #3a3a3a;
+      transform: translateY(-4px);
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .card-img {
+      background: var(--surface2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3.6rem;
+      height: 180px;
+      position: relative;
+      overflow: hidden;
+      /* swap emoji for <img> with same class to replace placeholder */
+    }
+    .card-img::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 60%, var(--surface));
+      pointer-events: none;
+    }
+    .badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: var(--accent);
+      color: #0e0e0e;
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 4px 8px;
+      border-radius: 6px;
+      z-index: 1;
+    }
+
+    .card-body {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+    }
+    .card-cat {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    .card-name {
+      font-family: 'Unbounded', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+      line-height: 1.4;
+      color: var(--text);
+    }
+    .card-desc {
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .card-footer {
+      padding: 0 16px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: auto;
+    }
+    .price {
+      font-family: 'Unbounded', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--accent);
+      letter-spacing: -0.03em;
+    }
+
+    .tg-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #229ED9;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 9px 14px;
+      font-family: 'Manrope', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .tg-btn:hover { background: #1a8cbf; transform: scale(1.04); }
+    .tg-btn svg { flex-shrink: 0; }
+
+    /* ─── EMPTY STATE ─── */
+    .empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 80px 0;
+      color: var(--muted);
+    }
+    .empty span { font-size: 3rem; display: block; margin-bottom: 16px; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 24px;
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    /* ─── MOBILE ─── */
+    @media (max-width: 600px) {
+      .hero { padding: 40px 16px 28px; }
+      .filters-wrap { padding: 0 16px 24px; }
+      .catalog-wrap { padding: 0 16px 60px; }
+      .grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+      .card-img { height: 140px; font-size: 2.8rem; }
+      .card-body { padding: 12px; gap: 6px; }
+      .card-footer { padding: 0 12px 12px; }
+      .price { font-size: 0.9rem; }
+      .tg-btn { padding: 8px 10px; font-size: 0.72rem; }
+      .header-inner { height: 58px; }
+      .logo { font-size: 0.95rem; }
+    }
+    @media (max-width: 380px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="logo">Ваш<span>Бренд</span></div>
+    <a class="header-tg" href="https://t.me/+77471019256" target="_blank" rel="noopener">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.17 13.857l-2.93-.916c-.638-.203-.65-.638.136-.944l11.437-4.41c.531-.194.995.131.826.934l.255-.3z"/></svg>
+      Написать в TG
+    </a>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <h1>Ваш бренд<em>Ваш каталог товаров</em></h1>
+  <p>Выберите категорию и найдите нужный товар. Заказ через Telegram — быстро и удобно.</p>
+</section>
+
+<!-- FILTERS -->
+<div class="filters-wrap">
+  <div class="filters-label">Категории</div>
+  <div class="filters" id="filters">
+    <button class="filter-btn active" data-cat="all">Все товары</button>
+    <button class="filter-btn" data-cat="А">Товар А</button>
+    <button class="filter-btn" data-cat="Б">Товар Б</button>
+    <button class="filter-btn" data-cat="В">Товар В</button>
+    <button class="filter-btn" data-cat="Г">Товар Г</button>
+    <button class="filter-btn" data-cat="Д">Товар Д</button>
+  </div>
+</div>
+
+<!-- CATALOG -->
+<div class="catalog-wrap">
+  <div class="count-line" id="countLine"></div>
+  <div class="grid" id="grid"></div>
+</div>
+
+<!-- FOOTER -->
+<footer>© 2025 Ваш бренд &nbsp;·&nbsp; Все права защищены</footer>
+
+<script>
+  const TG = "https://t.me/+77471019256";
+
+  const tgIcon = `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.17 13.857l-2.93-.916c-.638-.203-.65-.638.136-.944l11.437-4.41c.531-.194.995.131.826.934l.255-.3z"/></svg>`;
+
+  const cats = ["А","Б","В","Г","Д"];
+  const emojis = ["📦","🎁","🛍️","⭐","🔥","💎","🧩","🪄","🎯","🏷️"];
+  const prices = [490,690,890,1190,1390,1690,990,2190,3490,4990,799,1299,2499,599,1099];
+  const descs = [
+    "Отличное качество, быстрая доставка.",
+    "Популярная позиция, есть в наличии.",
+    "Хит продаж этого сезона.",
+    "Ограниченное количество на складе.",
+    "Новинка в нашем ассортименте.",
+  ];
+
+  const products = Array.from({ length: 50 }, (_, i) => {
+    const cat = cats[i % cats.length];
+    return {
+      id: i + 1,
+      name: `Ваш товар ${i + 1}`,
+      cat,
+      emoji: emojis[i % emojis.length],
+      price: prices[i % prices.length],
+      desc: descs[i % descs.length],
+      badge: i % 7 === 0 ? "Хит" : i % 11 === 0 ? "Новинка" : null,
+    };
+  });
+
+  let activeCat = "all";
+
+  function render() {
+    const filtered = activeCat === "all" ? products : products.filter(p => p.cat === activeCat);
+    const grid = document.getElementById("grid");
+    const countLine = document.getElementById("countLine");
+
+    countLine.innerHTML = `Показано <strong>${filtered.length}</strong> товаров`;
+
+    if (filtered.length === 0) {
+      grid.innerHTML = `<div class="empty"><span>🔍</span>Товары не найдены</div>`;
+      return;
+    }
+
+    grid.innerHTML = filtered.map((p, idx) => `
+      <div class="card" style="animation-delay:${Math.min(idx * 0.04, 0.6)}s">
+        <div class="card-img">
+          ${p.badge ? `<span class="badge">${p.badge}</span>` : ""}
+          ${p.emoji}
+        </div>
+        <div class="card-body">
+          <div class="card-cat">Товар ${p.cat}</div>
+          <div class="card-name">${p.name}</div>
+          <div class="card-desc">${p.desc}</div>
+        </div>
+        <div class="card-footer">
+          <span class="price">${p.price.toLocaleString("ru-RU")} ₽</span>
+          <a class="tg-btn" href="${TG}" target="_blank" rel="noopener">
+            ${tgIcon} Купить
+          </a>
+        </div>
+      </div>
+    `).join("");
+  }
+
+  document.getElementById("filters").addEventListener("click", e => {
+    const btn = e.target.closest(".filter-btn");
+    if (!btn) return;
+    document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    activeCat = btn.dataset.cat;
+    render();
+  });
+
+  render();
+</script>
+</body>
+</html>
